@@ -3,9 +3,9 @@
 Conceitos básicos da linguagem. *Curso nível Básico*
 
 ## Objetivos
-[] Entender como javascript funciona
-[] Aprender a programar utilizando javascript *?*
-[] Desenvolver páginas utilizando javascript
+- Entender como javascript funciona
+- Aprender a programar utilizando javascript *?*
+- Desenvolver páginas utilizando javascript
 
 ## Resumo
         
@@ -160,4 +160,68 @@ console.log(d.getDate()) //retorna o dia do mês
 console.log(d.getFullYear()) //retorna o ano com 4 digitos
 console.log(d.getHours()) //retorna a hora
 ```
+
+## Páginas web com javascript
+
+### Funções
+
+Trechos de código que realizam uma operação e retornam um resultado. Podem receber parâmetros ou não. 
+**Variáveis declaradas dentro da função** possuem escopo local (`let` ou `const`). Variáveis declaradas com `var` podem escapar do escopo da função e causar eventuais erros na aplicação.
+
+```javascript
+function soma (n1, n2){
+    return n1 + n2
+}
+
+function square (num){
+
+}
+
+console.log(`5 + 10 = ${soma(5,10)}`)
+
+//------------------
+let number = prompt('Qual número deseja saber o quadrado?') //number está acessível a qualquer função no escopo de main.js
+
+function square(num){
+    return num * num
+}
+
+console.log(square(number))
+```
+
+### Manipulando elementos da página
+
+Através do **objeto** `.document` temos acesso a uma série de métodos para manipulação de elementos da página. *No exemplo abaixo, utilizamos o método `.getElementById()` para informar que desejamos manipular o elemento da página identificado como 'agradecimento'. Em seguida, utilizamos `innerHTML` para inserir dentro da tag o texto 'Obrigado por clicar!'* 
+
+```javascript
+function botao(){
+    document
+        .getElementById('agradecimento')
+        .innerHTML = 'Obrigado por clicar!' //captura o elemento da página com o id 'agradecimento' e insere o texto dentro do elemento
+}
+```
+
+Elementos podem ser acessados no documento através de:
+
+- `document.getElementById()`
+- `document.getElementByClassName()`
+- `document.getElementByTagName()`
+
+#### this
+
+Podemos poupar esse acesso através de `document` fazendo com que o elemento que chame a função *passe a sí mesmo como parâmetro*
+
+```html
+<p onmouseover = trocar(this)></p>
+```
+
+```javascript
+function trocar(elemento){
+    elemento
+        .innerHTML = 'passou o mouse aqui!'
+}
+```
+
+*O resultado do exemplo acima, é que ao passar o mouse sobre a tag `p`, o texto `passou o mouse aqui` será inserido em seu interior* 
+Isso auxilia no reuso de funções para acesso de elementos
 

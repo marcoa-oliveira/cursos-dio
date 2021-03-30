@@ -476,3 +476,135 @@ class Person {
 
     console.log(Person.walk()) //andou!
 ```
+## Design Patterns
+
+- **Definição**: são soluções generalistas para a solução de problemas recorrentes
+ - *A Pattern Language*: 1978, C. Alexander, S. Ishikawa e M. Silverstein - 253 tipos de problemas / desafios de projetos
+ - **Formato de um Pattern:**:
+  - Nome
+  - Exemplo
+  - Contexto
+  - Problema
+  - Solução
+ - *Using Pattern Languages for Object-Oriented Programs*: 1987, K. Beck (Extreme Programming / TDD) e W. Cunningham - 5 padrões de projetos
+ - *Design Patterns: Elements of Reusable Object-Oriented Software*: 1994, Gang of Four (E.Gamma, R. Helm, R. Johnson e J. Vlissides) 
+- Tipos
+ - Criação: *abstraem ou adiam o processo de criação de objetos. Ajudam o sistema a ser independente de como seus objetos são criados, compostos e representados*
+  - *Abstract Factory*
+  - *Builder*
+  - *Factory Method*
+  - *Prototype*
+  - *Singleton*
+ - Estrutural: *se preocupam com a forma como classes e objetos são compostos para formar estruturas maiores*
+  - *Adapter*
+  - *Bridge*
+  - *Composite*
+  - *Decorator*
+  - *Facade*
+  - *Business Delegate*
+  - *Flyweight*
+  - *Proxy*
+ - Comportamental: *se concentram nos algoritmos e abribuições de responsabilidades entre os objetos. Não descrevem apenas os padrões de objetos e classes, mas também o padrão de comunicação entre objetos*
+  - *Chain of Responsability*
+  - *Command*
+  - *Interpreter*
+  - *Iterator*
+  - *Mediator*
+  - *Observer*
+  - *State*
+  - *Strategy*
+  - *Template Method*
+  - *Visitor*
+- **Patterns mais utilizados**:
+ - *Factory*: Toda função que retorna um objeto sem a necessidade de chamá-las com `new` são funções Factory. 
+
+```javascript
+ function FakeUser(){
+  return{}
+   name: 'João',
+   lastName: 'da Silva'
+  }
+  
+  //factory
+  const user = FakeUser()
+ ```
+
+- *Singleton*: Cria uma única instância de uma função construtora e retorná-la toda vez em que for necessário utilizá-la
+
+```javascript
+function Pessoa(){
+ if(!Pessoa.instance){ //instance é uma propriedade que controla se foi ou não instanciada
+  Pessoa.instance = this
+ }
+ return Pessoa.instance
+}
+
+const p = Pessoa.call({name: 'João'}) //chama passando um contexto
+const p2 = Pessoa.call({name: 'José'})
+
+console.log(p) //João
+console.log(p2) //João ---- retorna sempre a primeira instância, não cria outra
+
+```
+
+ - *Decorator*: recebe outra função (*High Order Functions*) como parâmetro e estende seu comportamento sem modificá-la explicitamente (*Stage 2 - TC39, mas utilizável com TypeScript*)
+
+```javascript
+//exemplo: controlar a execução de uma função para que apenas execute se o usuário estiver autenticado
+
+let loggedIn = false
+
+function callIfAuthenticated(fn){ //decorator controla a execução da função
+ return !!loggedIn && fn()
+}
+
+function sum(a,b){ //só executa se loggedIn = true
+ return a+b
+}
+
+console.log(callAuthenticated(() => sum(2,3))) // não executa
+loggedIn = true
+console.log(callAuthenticated(() => sum(2,3))) // 5
+```
+ 
+ - *Observer*: **Muito popular em aplicações JS.** A instância `subscriber` mantém uma coleção de objetos `observers` e notifica todos quando há mudança no estado (*Vue, RxJs*)
+
+```javascript
+
+class Observable{
+ constructor(){
+  this.observers = [] //mantém uma lista de observers
+ }
+ 
+ subscribe(f){
+  this.observers.push(f) //adiciona novos observers
+ }
+ 
+ unsubscribe(f){
+  this.observers = this.observers.filter(subscriber => subscriber !== f)
+ } //remove observers
+ 
+ notify(data){
+  this.observers.forEach(fn => fn(data)) //notifica os observers
+ }
+}
+
+const o = new Observable() //instancia a classe
+
+const logData1 = data => console.log(`Subscribe 1: ${data}`)
+const logData2 = data => console.log(`Subscribe 2: ${data}`)
+const logData3 = data => console.log(`Subscribe 3: ${data}`)
+
+//recebem uma função que será disparada quando notificados
+
+o.subscribe(logData1)
+o.subscribe(logData2) //inscreve os observers
+o.subscribe(logData3)
+
+o.notify('notified - 1') //dispara as notificações para logData1, 2 e 3
+//Subscribe 1: notified - 1
+//Subscribe 2: notified - 1
+//Subscribe 3: notified - 1
+
+```
+ - *Module*: Possibilita uma melhor organização do código sem a exposição de variáveis globais (`import`, `export`)
